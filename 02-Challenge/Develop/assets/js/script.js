@@ -2,6 +2,46 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+const createProjectButton = document.getElementById('create-project');
+
+createProjectButton.addEventListener('click',function(){
+
+const title = document.getElementById("project-name").value;
+const dueDate = document.getElementById("due-date-text").value;
+const description = document.getElementById("description-text").value;
+
+if(title === ""){
+    window.alert("No Project Title Added")
+    return
+}
+if(dueDate === ""){
+    window.alert("No Due Date Added")
+    return
+}
+if(description === ""){
+    window.alert("No Project Description Added")
+    return
+}
+
+let newProject = {
+    title:title,
+    dueDate:dueDate,
+    description:description,
+}
+const allProjects = JSON.parse(localStorage.getItem('projects')) || [];
+allProjects.push(newProject);
+localStorage.setItem('projects', JSON.stringify(allProjects));
+
+document.getElementById("project-name").value ="";
+            document.getElementById("due-date-text").value ="";
+            document.getElementById("description-text").value = "";
+
+const modal = document.getElementById('formModal');
+modal.style.display = 'none';
+
+})
+
+
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
 

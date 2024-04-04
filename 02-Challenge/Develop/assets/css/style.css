@@ -14,3 +14,8 @@ body {
 .task-card:hover {
   cursor: grab;
 }
+
+.draggable {
+ z-index: 9999;
+ cursor: pointer;
+}

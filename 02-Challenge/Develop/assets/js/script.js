@@ -9,25 +9,32 @@ let inProgressCardsElement = document.getElementById('in-progress-cards');
 let doneCardsElement = document.getElementById('done-cards')
 let createProjectButton = document.getElementById('create-project');
 let deleteProjectButton = document.getElementsByClassName('deletable');
+let pinProject;
+// let today = dayjs();
+// let projecteDueDate = dayjs($('#datepicker').datepicker('getDate'));
 
-// Todo: create a function to generate a unique task id
 
-// function generateTaskId() {
+// function colorChnger(today,projecteDueDate){
+// let untilDue = projecteDueDate.diff(today, 'days');
 
+
+// if (untilDue <= 3 && untilDue >= 0) {
+//     $('.draggable').addClass("text-bg-warning p-3");
 // }
 
-// // Todo: create a function to create a task card
-
-function createTaskCard(task) {
-
-}
-
+// else if (untilDue < 0) {
+//     $('.draggable').addClass("text-bg-danger p-3");
+// }
+// else if (untilDue > 3){
+//     $('.draggable').addClass("text-bg-secondary p-3")
+// }
+// }
 function handleAddTask(event){
 
     let title = document.getElementById("project-name").value;
-    let dueDate = document.getElementById("due-date-text").value;
+    let dueDate = document.getElementById("datepicker").value;
     let description = document.getElementById("description-text").value;
-
+    
 if(title === ""){
 window.alert("No Project Title Added")
 return
@@ -45,6 +52,7 @@ return
         title:title,
         dueDate:dueDate,
         description:description,
+        status:'todo',
 }
 //push the object into an array of objects
 allProjects.push(newProject);
@@ -52,13 +60,6 @@ allProjects.push(newProject);
 //Save them to local storage using javaScript object notation
 localStorage.setItem('projects', JSON.stringify(allProjects));
 
-//Clear the Modal
-// document.getElementById("project-name").value ="";
-// document.getElementById("due-date-text").value ="";
-// document.getElementById("description-text").value = "";
-
-// const modal = document.getElementById('formModal');
-// modal.style.display = 'none';
 location.reload()
 }
 
@@ -70,38 +71,32 @@ function renderTaskList() {
                 let pinProject = document.createElement('article');
     
                         pinProject.setAttribute('id', newProject.title );
-                        pinProject.classList.add('draggable','ui-draggable');
+                        pinProject.classList.add('draggable');
     
                 pinProject.innerHTML = `
-                <h2> Project Title: ${newProject.title}</h2>
+                <h2>${newProject.title}</h2>
                 <h4> Due By: ${newProject.dueDate}</h4>
                 <p>${newProject.description}</p>
-                <button id='deletable' class='deletable'> Delete </button>
+                <button type="button" id='deletable' class='deletable' 'btn-danger-subtle'> Delete </button>
             `
-
-            todoCardsElement.appendChild(pinProject)
-            sortProjects(pinProject)
+            sortProjects(pinProject,newProject)
 
             });
             
 }
 
-function sortProjects(pinProject){
-    
-    if (pinProject.classList.contains('todo-cards')){
-        todoCardsElement.appendChild(pinProject);
-    } else if (pinProject.classList.contains('in-progress-cards')){
+function sortProjects(pinProject, newProject){
+
+/// Sorts by object status
+    if (newProject.status === 'todo'){
+        todoCardsElement.appendChild(pinProject)
+    } else if(newProject.status === 'in-progress'){
         inProgressCardsElement.appendChild(pinProject)
-    } else if (pinProject.classList.contains('done-cards')){
+    } else if(newProject.status === 'done'){
         doneCardsElement.appendChild(pinProject)
     }
 
 }
-// Todo: create a function to handle adding a new task
-
-
-
-// Todo: create a function to handle deleting a task
 
 function handleDeleteTask(){
     
@@ -113,76 +108,79 @@ function handleDeleteTask(){
             localStorage.setItem('projects', JSON.stringify(allProjects));
     }
 
+function handleDrop(event, ui, allProjects, pinProject) {
+                 
+                let dragId = ui.draggable.attr('id');
+                let draggedProject = allProjects.find(project => project.title === dragId)
 
-// Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
+                if(event.target.classList.contains('in-progress-cards')){
+                  
+                        if(draggedProject && draggedProject.status !== 'in-progress'){
+                            draggedProject.status = 'in-progress'
+                        }
+                           
+                } else if (event.target.classList.contains('done-cards')){
+                   
+                        if(draggedProject && draggedProject.status !== 'done'){
+                            draggedProject.status = 'done'
+                        }
 
+
+                } else if(event.target.classList.contains('todo-cards')){
+                   
+                        if(draggedProject && draggedProject.status !== 'todo')
+                            draggedProject.status = 'todo'
+                    
+                     }
                 
-                //What section we are in 
-                console.log('section', event.target)
-                //What Item was dropped 
-                console.log('dropped', ui.draggable)
-                //Update the status property of the object
-                //Update local storage with new object properties
                 
 
-
-                // if(event.target.classList.contains('in-progress-cards')){
-               
-                //     inProgressCardsElement.appendChild(ui.draggable);
-                //  } else if (event.target.classList.contains('done-cards')){
-               
-                //     doneCardsElement.appendChild(ui.draggable);
-                //  } else if(event.target.classList.contains('todo-cards')){
-               
-                //     todoCardsElement.appendChild(ui.draggable);
-                //  }
-    
-            //  if(event.target.classList.contains('in-progress-cards')){
-            //     ui.draggable.classList.remove('todo-cards');
-            //     ui.draggable.classList.remove('done-cards');
-            //     ui.draggable.classList.add('in-progress-cards');
-            //     inProgressCardsElement.appendChild(ui.draggable);
-            //  } else if (event.target.classList.contains('done-cards')){
-            //     ui.draggable.classList.remove('todo-cards');
-            //     ui.draggable.classList.remove('in-progress-cards');
-            //     ui.draggable.classList.add('done-cards');
-            //     doneCardsElement.appendChild(ui.draggable);
-            //  } else if(event.target.classList.contains('todo-cards')){
-            //     ui.draggable.classList.remove('done-cards');
-            //     ui.draggable.classList.remove('in-progress-cards');
-            //     ui.draggable.classList.add('todo-cards');
-            //     todoCardsElement.appendChild(ui.draggable);
-            //  }
-
+            localStorage.setItem('projects', JSON.stringify(allProjects));
+           
 }
 
 $(document).ready(function () {
 
-
+    //Render tasks from local storage and sort tem into appropriate coloumns 
     renderTaskList()
-    
+ 
+    //Add the Delete function to each button element
     Array.from(deleteProjectButton).forEach(button => {
         button.addEventListener('click', handleDeleteTask)
     });
     
-    
+    //Create Project event listener
     createProjectButton.addEventListener('click',handleAddTask)
     
     
-    
+    // Jquery drag and drop triggers
     $('.draggable').draggable();
     
-    $('.todo-cards').droppable({  
-        drop:handleDrop  
+    $('.todo-cards').droppable({
+        drop: function(event,ui){
+            handleDrop(event, ui, allProjects, pinProject)
+        }
         });
         
     $('.in-progress-cards').droppable({
-        drop:handleDrop
+        drop: function(event,ui){
+            handleDrop(event, ui, allProjects, pinProject)
+        }
         });
         
     $('.done-cards').droppable({
-        drop:handleDrop
+        drop: function(event, ui){
+            handleDrop(event, ui, allProjects, pinProject)
+        }
         });
     });
-    
+
+    //Jquery datepicker script
+    $( function() {
+        $( "#datepicker" ).datepicker({
+            showButtonPanel:true,
+            changeMonth:true,
+            minDate: new Date(2024,0,1),
+            maxDate: new Date(2024,11,31),
+        });
+      } );

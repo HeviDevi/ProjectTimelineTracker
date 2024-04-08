@@ -16,6 +16,15 @@ body {
 }
 
 .draggable {
- z-index: 9999;
- cursor: pointer;
+ z-index: 500;
+ cursor: grab;
+ border-radius: 20px;
+ margin: 10px;
+ background-color: rgb(70, 136, 190);
+ color:whitesmoke
 }
+
+#formModal {
+  z-index: 9999;
+}
+

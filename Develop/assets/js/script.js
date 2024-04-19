@@ -14,22 +14,21 @@ let today = dayjs();
 let projecteDueDate = dayjs($('#datepicker').datepicker('getDate'));
 
 
-function colorChanger(today,projecteDueDate,pinProject){
+function colorChanger(today,projecteDueDate,pinProject,done,draggedProject){
     let untilDue = projecteDueDate.diff(today, 'days');
     
-    
-    if (untilDue <= 3 && untilDue >= 0) {
+    if(done || draggedProject.status === 'done'){
+        pinProject.style.backgroundColor = 'green';
+
+    } else if (untilDue <= 3 && untilDue >= 0 && !done && draggedProject.status !== 'done') {
       pinProject.style.backgroundColor = 'yellow';
-    }
     
-    else if (untilDue < 0) {
+    
+    } else if (untilDue < 0 && !done && draggedProject.status !== 'done') {
         pinProject.style.backgroundColor = 'red';
 
-    } else if (untilDue > 3){
+    } else if (untilDue > 3 && !done && draggedProject.status !== 'done'){
        pinProject.style.backgroundColor = 'blue';
-
-    } else if (pinProject.classList.contains('done-cards')){
-        pinProject.style.backgroundColor = 'green';
     }
     };
 
@@ -86,9 +85,9 @@ function renderTaskList() {
                 <button type="button" id='deletable' class='deletable' 'btn-danger-subtle'> Delete </button>
             `
             let projecteDueDate = dayjs(newProject.dueDate);
-
+            let done = newProject.status === 'done'
             sortProjects(pinProject,newProject)
-            colorChanger(today,projecteDueDate,pinProject)
+            colorChanger(today,projecteDueDate,pinProject,done,newProject)
             });
             
 }
@@ -120,7 +119,9 @@ function handleDrop(event, ui, allProjects, pinProject) {
                  
                 let dragId = ui.draggable.attr('id');
                 let draggedProject = allProjects.find(project => project.title === dragId)
-
+                if (!draggedProject) {
+                    return;
+                }
                 if(event.target.classList.contains('in-progress-cards')){
                   
                         if(draggedProject && draggedProject.status !== 'in-progress'){
@@ -138,14 +139,16 @@ function handleDrop(event, ui, allProjects, pinProject) {
                    
                         if(draggedProject && draggedProject.status !== 'todo')
                             draggedProject.status = 'todo'
-                    
                      }
                 
                 
 
             localStorage.setItem('projects', JSON.stringify(allProjects));
             let projecteDueDate = dayjs($('#datepicker').datepicker('getDate'));
-           colorChanger(today,projecteDueDate,pinProject)
+            let done = event.target.classList.contains('done-cards')
+
+           colorChanger(today,projecteDueDate,pinProject,done,draggedProject)
+          
 }
 
 $(document).ready(function () {

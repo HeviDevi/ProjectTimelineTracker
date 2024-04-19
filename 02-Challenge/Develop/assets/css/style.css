@@ -20,11 +20,12 @@ body {
  cursor: grab;
  border-radius: 20px;
  margin: 10px;
- background-color: rgb(70, 136, 190);
- color:whitesmoke
+ /* color:whitesmoke */
+ color:black
 }
 
 #formModal {
   z-index: 9999;
 }
 
+ 

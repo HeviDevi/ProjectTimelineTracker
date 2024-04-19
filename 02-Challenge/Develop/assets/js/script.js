@@ -10,27 +10,31 @@ let doneCardsElement = document.getElementById('done-cards')
 let createProjectButton = document.getElementById('create-project');
 let deleteProjectButton = document.getElementsByClassName('deletable');
 let pinProject;
-// let today = dayjs();
-// let projecteDueDate = dayjs($('#datepicker').datepicker('getDate'));
+let today = dayjs();
+let projecteDueDate = dayjs($('#datepicker').datepicker('getDate'));
 
 
-// function colorChnger(today,projecteDueDate){
-// let untilDue = projecteDueDate.diff(today, 'days');
+function colorChanger(today,projecteDueDate,pinProject){
+    let untilDue = projecteDueDate.diff(today, 'days');
+    
+    
+    if (untilDue <= 3 && untilDue >= 0) {
+      pinProject.style.backgroundColor = 'yellow';
+    }
+    
+    else if (untilDue < 0) {
+        pinProject.style.backgroundColor = 'red';
 
+    } else if (untilDue > 3){
+       pinProject.style.backgroundColor = 'blue';
 
-// if (untilDue <= 3 && untilDue >= 0) {
-//     $('.draggable').addClass("text-bg-warning p-3");
-// }
+    } else if (pinProject.classList.contains('done-cards')){
+        pinProject.style.backgroundColor = 'green';
+    }
+    };
 
-// else if (untilDue < 0) {
-//     $('.draggable').addClass("text-bg-danger p-3");
-// }
-// else if (untilDue > 3){
-//     $('.draggable').addClass("text-bg-secondary p-3")
-// }
-// }
 function handleAddTask(event){
-
+event.preventDefault();
     let title = document.getElementById("project-name").value;
     let dueDate = document.getElementById("datepicker").value;
     let description = document.getElementById("description-text").value;
@@ -60,8 +64,10 @@ allProjects.push(newProject);
 //Save them to local storage using javaScript object notation
 localStorage.setItem('projects', JSON.stringify(allProjects));
 
+
 location.reload()
 }
+
 
 // Todo: create a function to render the task list and make cards draggable
 
@@ -79,8 +85,10 @@ function renderTaskList() {
                 <p>${newProject.description}</p>
                 <button type="button" id='deletable' class='deletable' 'btn-danger-subtle'> Delete </button>
             `
-            sortProjects(pinProject,newProject)
+            let projecteDueDate = dayjs(newProject.dueDate);
 
+            sortProjects(pinProject,newProject)
+            colorChanger(today,projecteDueDate,pinProject)
             });
             
 }
@@ -136,7 +144,8 @@ function handleDrop(event, ui, allProjects, pinProject) {
                 
 
             localStorage.setItem('projects', JSON.stringify(allProjects));
-           
+            let projecteDueDate = dayjs($('#datepicker').datepicker('getDate'));
+           colorChanger(today,projecteDueDate,pinProject)
 }
 
 $(document).ready(function () {
@@ -158,19 +167,19 @@ $(document).ready(function () {
     
     $('.todo-cards').droppable({
         drop: function(event,ui){
-            handleDrop(event, ui, allProjects, pinProject)
+            handleDrop(event, ui, allProjects, ui.draggable[0])
         }
         });
         
     $('.in-progress-cards').droppable({
         drop: function(event,ui){
-            handleDrop(event, ui, allProjects, pinProject)
+            handleDrop(event, ui, allProjects, ui.draggable[0])
         }
         });
         
     $('.done-cards').droppable({
         drop: function(event, ui){
-            handleDrop(event, ui, allProjects, pinProject)
+            handleDrop(event, ui, allProjects, ui.draggable[0])
         }
         });
     });

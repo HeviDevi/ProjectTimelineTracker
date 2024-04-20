@@ -30,5 +30,5 @@ Moving forward I would like to explore Jqueries draggable and droppable features
 ## Deployment
 The link to the Deployed site:
 https://hevidevi.github.io/Yes-We-Kanban/
-
+![](/assets/screenshot/Yes-We-Kanban-Screenshot.png)
 

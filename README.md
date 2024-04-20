@@ -27,23 +27,8 @@ Color codes tasks by due date to visualy aid the user.
 Moving forward I would like to explore Jqueries draggable and droppable features so that the task cards snap to the box and each other for a more uniform look. 
 
 
-### Deployment: 32%
+## Deployment
+The link to the Deployed site:
+https://hevidevi.github.io/Yes-We-Kanban/
 
-* Application deployed at live URL
 
-* Application loads with no errors
-
-* Application GitHub URL submitted
-
-* GitHub repo contains application code
-
-## Review
-
-You are required to submit the following for review:
-
-* The URL of the deployed application
-
-* The URL of the GitHub repository, with a unique name and a README describing the project
-
-- - -
-© 2024 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.

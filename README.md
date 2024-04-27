@@ -2,9 +2,9 @@
 
 ## Description
 Time managment is one of the most critical skills in any profession and in our daily lives. 
-This simple Kanban board sets out to aid the user in tracking and prioritizing tasks 
+This simple Kanban board sets out to aid the user in tracking and prioritizing tasks. 
 I was motivated to build this project to help myself keep track of upcoming tasks related to school, work, and my personal life.
-i does this by ustilizing Jquery's draggable and droppable features as well as its datepicker features and the native dayjs() functionalities.
+It does this by ustilizing Jquery's draggable and droppable features as well as its datepicker features and the native dayjs() functionalities.
 
 ## Usage
 
